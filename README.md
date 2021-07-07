@@ -1,3 +1,31 @@
+ - To change data encoding method: (fixed, linear, quadratic, exponential)
+
+	dataloader/dataset_semantickitti.py, line 258 - 288, comment and uncomment the corresponding part
+
+ - To change feature shape: ([480, 360, 32], [360, 360, 32],.....)
+
+	config/semantickitti.yaml, line 10 - 12
+
+ - To change network architecture: (AsymCNN, vanillaCNN)
+
+	network/segmentator_3d_asymm_spconv.py 
+
+	line 46 - 109 class ResContextBlock(nn.Module): 
+
+	comment and uncomment the corresponding part in both **init** and **forward** function
+
+ - To change loss function (unweighted, weighted)
+
+	builder/loss_builder.py
+
+	line 11 - 21
+
+	comment and uncomment the corresponding part
+
+
+
+
+
 
 # Cylindrical and Asymmetrical 3D Convolution Networks for LiDAR Segmentation
 
