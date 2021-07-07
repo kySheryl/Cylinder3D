@@ -20,6 +20,10 @@ REGISTERED_DATASET_CLASSES = {}
 def triple_func(x):
     return x ** (1/3)
 
+# quadratic
+def quadratic_func(x):
+    return x ** 0.5
+
 # ln
 def ln_func(x):
     return np.log(x)
@@ -251,9 +255,20 @@ class cylinder_dataset(data.Dataset):
         intervals = crop_range / (cur_grid_size - 1)
 
         if (intervals == 0).any(): print("Zero interval!")
-        # fixed
+        # fixed (baseline)
         # grid_ind = (np.floor((np.clip(xyz_pol, min_bound, max_bound) - min_bound) / intervals)).astype(np.int)
-
+        ################
+        
+        # quadratic (linear interval)
+#         x_clip = np.clip(xyz_pol, min_bound, max_bound)
+#         a = (cur_grid_size[0] - 1) / (quadratic_func(max_bound[0] - min_bound[0]))
+#         tmp_y = a * quadratic_func(x_clip[:, 0] - min_bound[0])
+#         grid_ind1 = (np.floor(tmp_y)).astype(np.int)
+#         grid_ind2 = (np.floor((x_clip[:, 1:] - min_bound[1:]) / ((max_bound[1:] - min_bound[1:]) / (
+#                     cur_grid_size[1:] - 1)))).astype(np.int)
+#         grid_ind = np.concatenate((grid_ind1.reshape((grid_ind1.shape[0], 1)), grid_ind2), axis=1)
+        ################
+        
         # triple (quadratic interval)
         #x_clip = np.clip(xyz_pol, min_bound, max_bound)
         #a = (cur_grid_size[0] - 1) / (triple_func(max_bound[0] - min_bound[0]))
