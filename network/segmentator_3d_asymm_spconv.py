@@ -46,13 +46,14 @@ def conv1x1(in_planes, out_planes, stride=1, indice_key=None):
 class ResContextBlock(nn.Module):
     def __init__(self, in_filters, out_filters, kernel_size=(3, 3, 3), stride=1, indice_key=None):
         super(ResContextBlock, self).__init__()
-        ####no asymconv
+        #### vanillaCNN
         # self.conv1 = conv3x3(in_filters, out_filters, indice_key=indice_key + "bef")
         # self.bn0 = nn.BatchNorm1d(out_filters)
         # self.act1 = nn.LeakyReLU()
         # self.weight_initialization()
         ##################
         
+        ##### AsymCNN
         self.conv1 = conv1x3(in_filters, out_filters, indice_key=indice_key + "bef")
         self.bn0 = nn.BatchNorm1d(out_filters)
         self.act1 = nn.LeakyReLU()
@@ -70,6 +71,7 @@ class ResContextBlock(nn.Module):
         self.bn2 = nn.BatchNorm1d(out_filters)
 
         self.weight_initialization()
+        #####################
 
     def weight_initialization(self):
         for m in self.modules():
@@ -78,13 +80,14 @@ class ResContextBlock(nn.Module):
                 nn.init.constant_(m.bias, 0)
 
     def forward(self, x):
-        ####noasymconv
+        ####vanillaCNN
         # shortcut = self.conv1(x)
         # shortcut.features = self.act1(shortcut.features)
         # shortcut.features = self.bn0(shortcut.features)
         # return shortcut
-        ############
+        #################
         
+        #### AsymCNN        
         shortcut = self.conv1(x)
         shortcut.features = self.act1(shortcut.features)
         shortcut.features = self.bn0(shortcut.features)
@@ -103,6 +106,7 @@ class ResContextBlock(nn.Module):
         resA.features = resA.features + shortcut.features
 
         return resA
+        #######################
 
 
 class ResBlock(nn.Module):
