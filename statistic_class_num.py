@@ -26,7 +26,7 @@ def plot():
         plt.title('Sequence' + str(j).zfill(2))
 
         # plt.show()
-        plt.savefig('barChart' + str(j).zfill(2) + '.jpg')
+        plt.savefig('barChart_new' + str(j).zfill(2) + '.jpg')
 
 
 def statistc_class():
@@ -37,10 +37,10 @@ def statistc_class():
     statistc_class_dic = {}
     file_num = 11
     root_path = '/Users/yexinyi/Desktop/VE450.nosync/data/merge/dataset/sequences'
-    for i in range(20):
-        statistc_class_dic[i] = 0
 
     for j in range(file_num):
+        for i in range(20):
+            statistc_class_dic[i] = 0
         folder_path = os.path.join(root_path, str(j).zfill(2), 'labels')
         # folder_path = '/Users/yexinyi/Desktop/VE450.nosync/data/val_sub/dataset/sequences/08/labels'
         for root, dirs, files in os.walk(folder_path):
@@ -55,11 +55,10 @@ def statistc_class():
                         if learning_map[tmp[i][0]] in statistc_class_dic.keys():
                             statistc_class_dic[learning_map[tmp[i][0]]] += 1
 
-        with open('out_val' + str(j).zfill(2) + '.txt', 'w') as file:
+        with open('out_new' + str(j).zfill(2) + '.txt', 'w') as file:
             for i in statistc_class_dic.values():
                 file.write(str(i) + '\n')
 
-        break
 
 def split_dataset():
     folder_path = '/Users/yexinyi/Desktop/VE450.nosync/data/merge/dataset/sequences/08/labels'
