@@ -53,6 +53,18 @@ class ResContextBlock(nn.Module):
         # self.weight_initialization()
         ##################
         
+        ####111-333 network####
+        # self.conv1 = conv1x1nopad(in_filters, out_filters, indice_key=indice_key + "bef")
+        # self.bn0 = nn.BatchNorm1d(out_filters)
+        # self.act1 = nn.LeakyReLU()
+        
+        # self.conv1_2 = conv3x3(out_filters, out_filters, indice_key=indice_key + "bef")
+        # self.bn0_2 = nn.BatchNorm1d(out_filters)
+        # self.act1_2 = nn.LeakyReLU()
+        
+        # self.weight_initialization()
+        ###############
+        
         ##### AsymCNN
         self.conv1 = conv1x3(in_filters, out_filters, indice_key=indice_key + "bef")
         self.bn0 = nn.BatchNorm1d(out_filters)
@@ -84,6 +96,18 @@ class ResContextBlock(nn.Module):
         # shortcut = self.conv1(x)
         # shortcut.features = self.act1(shortcut.features)
         # shortcut.features = self.bn0(shortcut.features)
+        # return shortcut
+        #################
+        
+        ####111-333 network####
+        # shortcut = self.conv1(x)
+        # shortcut.features = self.act1(shortcut.features)
+        # shortcut.features = self.bn0(shortcut.features)
+
+        # shortcut = self.conv1_2(shortcut)
+        # shortcut.features = self.act1_2(shortcut.features)
+        # shortcut.features = self.bn0_2(shortcut.features)
+        
         # return shortcut
         #################
         
@@ -233,36 +257,74 @@ class UpBlock(nn.Module):
 class ReconBlock(nn.Module):
     def __init__(self, in_filters, out_filters, kernel_size=(3, 3, 3), stride=1, indice_key=None):
         super(ReconBlock, self).__init__()
-        self.conv1 = conv3x1x1(in_filters, out_filters, indice_key=indice_key + "bef")
+        #### vanillaCNN
+        self.conv1 = conv3x3(in_filters, out_filters, indice_key=indice_key + "bef")
         self.bn0 = nn.BatchNorm1d(out_filters)
         self.act1 = nn.Sigmoid()
+        ##################
+        
+        #### 111-333 network###
+        # self.conv1 = conv1x1nopad(in_filters, out_filters, indice_key=indice_key + "bef")
+        # self.bn0 = nn.BatchNorm1d(out_filters)
+        # self.act1 = nn.Sigmoid()
+        
+        # self.conv1_2 = conv3x3(out_filters, out_filters, indice_key=indice_key + "bef")
+        # self.bn0_2 = nn.BatchNorm1d(out_filters)
+        # self.act1_2 = nn.Sigmoid()
+        ####################
+        
+        #### original DDCM
+        # self.conv1 = conv3x1x1(in_filters, out_filters, indice_key=indice_key + "bef")
+        # self.bn0 = nn.BatchNorm1d(out_filters)
+        # self.act1 = nn.Sigmoid()
 
-        self.conv1_2 = conv1x3x1(in_filters, out_filters, indice_key=indice_key + "bef")
-        self.bn0_2 = nn.BatchNorm1d(out_filters)
-        self.act1_2 = nn.Sigmoid()
+        # self.conv1_2 = conv1x3x1(in_filters, out_filters, indice_key=indice_key + "bef")
+        # self.bn0_2 = nn.BatchNorm1d(out_filters)
+        # self.act1_2 = nn.Sigmoid()
 
-        self.conv1_3 = conv1x1x3(in_filters, out_filters, indice_key=indice_key + "bef")
-        self.bn0_3 = nn.BatchNorm1d(out_filters)
-        self.act1_3 = nn.Sigmoid()
+        # self.conv1_3 = conv1x1x3(in_filters, out_filters, indice_key=indice_key + "bef")
+        # self.bn0_3 = nn.BatchNorm1d(out_filters)
+        # self.act1_3 = nn.Sigmoid()
+        ###################
 
     def forward(self, x):
+        ####vanillaCNN
         shortcut = self.conv1(x)
         shortcut.features = self.bn0(shortcut.features)
         shortcut.features = self.act1(shortcut.features)
-
-        shortcut2 = self.conv1_2(x)
-        shortcut2.features = self.bn0_2(shortcut2.features)
-        shortcut2.features = self.act1_2(shortcut2.features)
-
-        shortcut3 = self.conv1_3(x)
-        shortcut3.features = self.bn0_3(shortcut3.features)
-        shortcut3.features = self.act1_3(shortcut3.features)
-        shortcut.features = shortcut.features + shortcut2.features + shortcut3.features
-
-        shortcut.features = shortcut.features * x.features
-
         return shortcut
+        #################
+        
+        ####111-333 network####
+        # shortcut = self.conv1(x)
+        # shortcut.features = self.bn0(shortcut.features)
+        # shortcut.features = self.act1(shortcut.features)
 
+        # shortcut = self.conv1_2(shortcut)
+        # shortcut.features = self.bn0_2(shortcut.features)
+        # shortcut.features = self.act1_2(shortcut.features)
+        
+        # return shortcut
+        #################
+        
+        #### original DDCM
+        # shortcut = self.conv1(x)
+        # shortcut.features = self.bn0(shortcut.features)
+        # shortcut.features = self.act1(shortcut.features)
+
+        # shortcut2 = self.conv1_2(x)
+        # shortcut2.features = self.bn0_2(shortcut2.features)
+        # shortcut2.features = self.act1_2(shortcut2.features)
+
+        # shortcut3 = self.conv1_3(x)
+        # shortcut3.features = self.bn0_3(shortcut3.features)
+        # shortcut3.features = self.act1_3(shortcut3.features)
+        # shortcut.features = shortcut.features + shortcut2.features + shortcut3.features
+
+        # shortcut.features = shortcut.features * x.features
+
+        # return shortcut
+        ###################
 
 class Asymm_3d_spconv(nn.Module):
     def __init__(self,
